@@ -409,8 +409,10 @@ const VideoPlayer = (props: Props) => {
     switch (controlsState) {
       case ControlStates.Shown:
         // If the controls are currently Shown, a tap should hide controls quickly
-        setControlsState(ControlStates.Hiding)
-        hideControls(true)
+        if (playbackState === PlaybackStates.Playing) {
+          setControlsState(ControlStates.Hiding)
+          hideControls(true)
+        }
         break
       case ControlStates.Hidden:
         // If the controls are currently, show controls with fade-in animation
@@ -465,8 +467,10 @@ const VideoPlayer = (props: Props) => {
 
   const onTimerDone = () => {
     // After the controls timer runs out, fade away the controls slowly
-    setControlsState(ControlStates.Hiding)
-    hideControls()
+    if (playbackState === PlaybackStates.Playing) {
+      setControlsState(ControlStates.Hiding)
+      hideControls()
+    }
   }
 
   const resetControlsTimer = () => {
