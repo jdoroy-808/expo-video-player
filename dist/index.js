@@ -11,7 +11,6 @@ const IOS_THUMB_IMAGE = require('./assets/thumb.png');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const IOS_TRACK_IMAGE = require('./assets/track.png');
 const SLIDER_COLOR = '#009485';
-const BUFFERING_SHOW_DELAY = 200;
 let isPlaying = false;
 // UI states
 var ControlStates;
@@ -86,7 +85,6 @@ const VideoPlayer = (props) => {
     let controlsTimer = null;
     const { isConnected } = useNetInfo();
     const [playbackState, setPlaybackState] = useState(PlaybackStates.Loading);
-    const [lastPlaybackStateUpdate, setLastPlaybackStateUpdate] = useState(Date.now());
     const [seekState, setSeekState] = useState(SeekStates.NotSeeking);
     const [playbackInstancePosition, setPlaybackInstancePosition] = useState(0);
     const [playbackInstanceDuration, setPlaybackInstanceDuration] = useState(0);
@@ -132,7 +130,6 @@ const VideoPlayer = (props) => {
             debug &&
                 console.info('[playback]', playbackState, ' -> ', newPlaybackState, ' [seek] ', seekState, ' [shouldPlay] ', shouldPlay);
             setPlaybackState(newPlaybackState);
-            setLastPlaybackStateUpdate(Date.now());
         }
     };
     const updateSeekState = (newSeekState) => {
@@ -421,8 +418,7 @@ const VideoPlayer = (props) => {
 
         
         
-        {((playbackState === PlaybackStates.Buffering &&
-        Date.now() - lastPlaybackStateUpdate > BUFFERING_SHOW_DELAY) ||
+        {(playbackState === PlaybackStates.Buffering ||
         playbackState === PlaybackStates.Loading) && (<View style={{
         position: 'absolute',
         left: (videoWidth - centeredContentWidth) / 2,

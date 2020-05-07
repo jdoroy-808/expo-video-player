@@ -35,7 +35,6 @@ const IOS_THUMB_IMAGE = require('./assets/thumb.png')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const IOS_TRACK_IMAGE = require('./assets/track.png')
 const SLIDER_COLOR: Color = '#009485'
-const BUFFERING_SHOW_DELAY = 200
 let isPlaying: boolean = false
 
 // UI states
@@ -168,7 +167,6 @@ const VideoPlayer = (props: Props) => {
 
   const { isConnected } = useNetInfo()
   const [playbackState, setPlaybackState] = useState<PlaybackStates>(PlaybackStates.Loading)
-  const [lastPlaybackStateUpdate, setLastPlaybackStateUpdate] = useState<number>(Date.now())
   const [seekState, setSeekState] = useState<SeekStates>(SeekStates.NotSeeking)
   const [playbackInstancePosition, setPlaybackInstancePosition] = useState(0)
   const [playbackInstanceDuration, setPlaybackInstanceDuration] = useState(0)
@@ -230,7 +228,6 @@ const VideoPlayer = (props: Props) => {
           shouldPlay
         )
       setPlaybackState(newPlaybackState)
-      setLastPlaybackStateUpdate(Date.now())
     }
   }
 
@@ -627,8 +624,7 @@ const VideoPlayer = (props: Props) => {
 
         {/* Spinner */}
         {/* Due to loading Animation, it cannot use CenteredView */}
-        {((playbackState === PlaybackStates.Buffering &&
-          Date.now() - lastPlaybackStateUpdate > BUFFERING_SHOW_DELAY) ||
+        {(playbackState === PlaybackStates.Buffering ||
           playbackState === PlaybackStates.Loading) && (
           <View
             style={{
