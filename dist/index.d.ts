@@ -2,6 +2,12 @@ import { AVPlaybackStatus, VideoProps } from 'expo-av/build/Video';
 import { ImageURISource, TextStyle } from 'react-native';
 import { Color } from 'csstype';
 import { ReactNode } from 'react';
+declare enum ControlStates {
+    Shown = "Show",
+    Showing = "Showing",
+    Hidden = "Hidden",
+    Hiding = "Hiding"
+}
 declare enum ErrorSeverity {
     Fatal = "Fatal",
     NonFatal = "NonFatal"
@@ -37,6 +43,7 @@ declare type Props = {
     errorCallback: (error: Error) => void;
     switchToLandscape: () => void;
     switchToPortrait: () => void;
+    onBackgroundPress: (controlState: ControlStates) => void;
     showControlsOnLoad: boolean;
     sliderColor: Color;
 };
@@ -69,6 +76,7 @@ declare const _default: (props: Pick<Props, "videoProps"> & {
     quickFadeOutDuration?: number | undefined;
     fadeOutDuration?: number | undefined;
     hideControlsTimerDuration?: number | undefined;
+    onBackgroundPress?: ((controlState: ControlStates) => void) | undefined;
     showControlsOnLoad?: boolean | undefined;
 }, ref?: unknown) => JSX.Element;
 export default _default;

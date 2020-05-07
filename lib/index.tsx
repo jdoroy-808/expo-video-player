@@ -36,6 +36,7 @@ const IOS_THUMB_IMAGE = require('./assets/thumb.png')
 const IOS_TRACK_IMAGE = require('./assets/track.png')
 const SLIDER_COLOR: Color = '#009485'
 const BUFFERING_SHOW_DELAY = 200
+let isPlaying: boolean = false
 
 // UI states
 enum ControlStates {
@@ -110,6 +111,7 @@ const defaultProps = {
   playbackCallback: (callback: AVPlaybackStatus) => {},
   switchToLandscape: () => console.warn(`Pass your logic to 'switchToLandscape' prop`),
   switchToPortrait: () => console.warn(`Pass your logic to 'switchToPortrait' prop`),
+  onBackgroundPress: (controlState: ControlStates) => {},
   showControlsOnLoad: false,
   sliderColor: SLIDER_COLOR,
 }
@@ -152,6 +154,7 @@ type Props = {
   errorCallback: (error: Error) => void
   switchToLandscape: () => void
   switchToPortrait: () => void
+  onBackgroundPress: (controlState: ControlStates) => void
   showControlsOnLoad: boolean
   sliderColor: Color
 }
@@ -274,6 +277,7 @@ const VideoPlayer = (props: Props) => {
         errorCallback({ type: ErrorSeverity.Fatal, message: errorMsg, obj: {} })
       }
     } else {
+      isPlaying = status.isPlaying;
       // Update current position, duration, and `shouldPlay`
       setPlaybackInstancePosition(status.positionMillis || 0)
       setPlaybackInstanceDuration(status.durationMillis || 0)
@@ -406,10 +410,11 @@ const VideoPlayer = (props: Props) => {
   }
 
   const toggleControls = () => {
+    props.onBackgroundPress(controlsState);
     switch (controlsState) {
       case ControlStates.Shown:
         // If the controls are currently Shown, a tap should hide controls quickly
-        if (playbackState === PlaybackStates.Playing) {
+        if (isPlaying) {
           setControlsState(ControlStates.Hiding)
           hideControls(true)
         }
@@ -467,7 +472,7 @@ const VideoPlayer = (props: Props) => {
 
   const onTimerDone = () => {
     // After the controls timer runs out, fade away the controls slowly
-    if (playbackState === PlaybackStates.Playing) {
+    if (isPlaying) {
       setControlsState(ControlStates.Hiding)
       hideControls()
     }

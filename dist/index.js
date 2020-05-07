@@ -12,6 +12,7 @@ const IOS_THUMB_IMAGE = require('./assets/thumb.png');
 const IOS_TRACK_IMAGE = require('./assets/track.png');
 const SLIDER_COLOR = '#009485';
 const BUFFERING_SHOW_DELAY = 200;
+let isPlaying = false;
 // UI states
 var ControlStates;
 (function (ControlStates) {
@@ -73,6 +74,7 @@ const defaultProps = {
     playbackCallback: (callback) => { },
     switchToLandscape: () => console.warn(`Pass your logic to 'switchToLandscape' prop`),
     switchToPortrait: () => console.warn(`Pass your logic to 'switchToPortrait' prop`),
+    onBackgroundPress: (controlState) => { },
     showControlsOnLoad: false,
     sliderColor: SLIDER_COLOR,
 };
@@ -164,6 +166,7 @@ const VideoPlayer = (props) => {
             }
         }
         else {
+            isPlaying = status.isPlaying;
             // Update current position, duration, and `shouldPlay`
             setPlaybackInstancePosition(status.positionMillis || 0);
             setPlaybackInstanceDuration(status.durationMillis || 0);
@@ -278,11 +281,14 @@ const VideoPlayer = (props) => {
         }
     };
     const toggleControls = () => {
+        props.onBackgroundPress(controlsState);
         switch (controlsState) {
             case ControlStates.Shown:
                 // If the controls are currently Shown, a tap should hide controls quickly
-                setControlsState(ControlStates.Hiding);
-                hideControls(true);
+                if (isPlaying) {
+                    setControlsState(ControlStates.Hiding);
+                    hideControls(true);
+                }
                 break;
             case ControlStates.Hidden:
                 // If the controls are currently, show controls with fade-in animation
@@ -331,8 +337,10 @@ const VideoPlayer = (props) => {
     };
     const onTimerDone = () => {
         // After the controls timer runs out, fade away the controls slowly
-        setControlsState(ControlStates.Hiding);
-        hideControls();
+        if (isPlaying) {
+            setControlsState(ControlStates.Hiding);
+            hideControls();
+        }
     };
     const resetControlsTimer = () => {
         const { hideControlsTimerDuration } = props;
