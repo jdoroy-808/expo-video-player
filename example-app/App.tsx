@@ -16,6 +16,9 @@ const App = () => (
       inFullscreen={true}
       videoBackground='transparent'
       height={220}
+      onBackgroundPress={(controlState: any) => {
+        console.log('controlState', controlState);
+      }}
     />
 
     <VideoPlayer

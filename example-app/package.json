@@ -11,7 +11,7 @@
     "@react-native-community/netinfo": "5.5.1",
     "expo": "^37.0.0",
     "expo-av": "~8.1.0",
-    "expo-video-player": "^1.5.7",
+    "expo-video-player": "git://github.com/jeremiahlachica/expo-video-player.git#412b5b5e848021307ead8a5a9e375eeee455d680",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
