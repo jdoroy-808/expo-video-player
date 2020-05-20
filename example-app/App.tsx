@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet } from 'react-native'
 import { Video } from 'expo-av'
 import React from 'react'
-import VideoPlayer from 'expo-video-player'
+import VideoPlayer from './dist/index'
 
 const App = () => (
   <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>

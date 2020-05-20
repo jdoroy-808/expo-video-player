@@ -24,6 +24,9 @@
   "scripts": {
     "build": "rm -rf dist && tsc & yarn copy",
     "copy": "copyfiles -u 1 \"./lib/assets/*.png\" \"./dist\"",
+    "copyDist": "yarn copyFiles && yarn copyAssets",
+    "copyAssets": "copyfiles -u 1 \"./dist/assets/*.**\" \"./example-app/dist\"",
+    "copyFiles": "copyfiles -u 1 \"./dist/*.**\" \"./example-app/dist\"",
     "lint": "eslint \"lib/**/*.{js,ts,tsx}\"",
     "lint:fix": "eslint \"lib/**/*.{js,ts,tsx}\" --fix",
     "test": "yarn lint && yarn tsc-test && yarn jest",
