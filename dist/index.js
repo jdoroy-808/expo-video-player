@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 const IOS_THUMB_IMAGE = require('./assets/thumb.png');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const IOS_TRACK_IMAGE = require('./assets/track.png');
-const SLIDER_COLOR = '#009485';
+const SLIDER_COLOR = '#0088FF';
 let isPlaying = false;
 // UI states
 var ControlStates;
@@ -68,6 +68,7 @@ const defaultProps = {
     },
     videoBackground: '#000',
     // Callbacks
+    videoRef: (vid) => { },
     errorCallback: (error) => console.error('Error: ', error.message, error.type, error.obj),
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     playbackCallback: (callback) => { },
@@ -411,6 +412,7 @@ const VideoPlayer = (props) => {
         <Video source={source} ref={component => {
         playbackInstance = component;
         ref && ref(component);
+        props.videoRef && props.videoRef(component);
     }} onPlaybackStatusUpdate={updatePlaybackCallback} style={{
         width: videoWidth,
         height: videoHeight,

@@ -1,5 +1,6 @@
 import { AVPlaybackStatus, VideoProps } from 'expo-av/build/Video';
 import { ImageURISource, TextStyle } from 'react-native';
+import { Video } from 'expo-av';
 import { Color } from 'csstype';
 import { ReactNode } from 'react';
 declare enum ControlStates {
@@ -39,6 +40,7 @@ declare type Props = {
     textStyle: TextStyle;
     videoBackground: Color;
     debug: boolean;
+    videoRef: (vid: Video | null) => void;
     playbackCallback: (callback: AVPlaybackStatus) => void;
     errorCallback: (error: Error) => void;
     switchToLandscape: () => void;
@@ -76,6 +78,7 @@ declare const _default: (props: Pick<Props, "videoProps"> & {
     quickFadeOutDuration?: number | undefined;
     fadeOutDuration?: number | undefined;
     hideControlsTimerDuration?: number | undefined;
+    videoRef?: ((vid: Video | null) => void) | undefined;
     onBackgroundPress?: ((controlState: ControlStates) => void) | undefined;
     showControlsOnLoad?: boolean | undefined;
 }, ref?: unknown) => JSX.Element;

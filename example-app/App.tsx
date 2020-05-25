@@ -3,6 +3,8 @@ import { Video } from 'expo-av'
 import React from 'react'
 import VideoPlayer from './dist/index'
 
+let video: Video | null = null;
+
 const App = () => (
   <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
     <VideoPlayer
@@ -11,13 +13,17 @@ const App = () => (
         resizeMode: Video.RESIZE_MODE_CONTAIN,
         source: {
           uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        },
+        }
       }}
       inFullscreen={true}
       videoBackground='transparent'
       height={220}
       onBackgroundPress={(controlState: any) => {
         console.log('controlState', controlState);
+        video.playAsync();
+      }}
+      videoRef={vid => {
+        video = vid;
       }}
     />
 

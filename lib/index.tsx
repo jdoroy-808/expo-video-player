@@ -34,7 +34,7 @@ import React, { ReactNode, useEffect, useState } from 'react'
 const IOS_THUMB_IMAGE = require('./assets/thumb.png')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const IOS_TRACK_IMAGE = require('./assets/track.png')
-const SLIDER_COLOR: Color = '#009485'
+const SLIDER_COLOR: Color = '#0088FF'
 let isPlaying: boolean = false
 
 // UI states
@@ -105,6 +105,7 @@ const defaultProps = {
   videoBackground: '#000',
 
   // Callbacks
+  videoRef: (vid: Video | null) => {},
   errorCallback: (error: Error) => console.error('Error: ', error.message, error.type, error.obj),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   playbackCallback: (callback: AVPlaybackStatus) => {},
@@ -149,6 +150,7 @@ type Props = {
 
   // Callbacks
   debug: boolean
+  videoRef: (vid: Video | null) => void
   playbackCallback: (callback: AVPlaybackStatus) => void
   errorCallback: (error: Error) => void
   switchToLandscape: () => void
@@ -613,6 +615,7 @@ const VideoPlayer = (props: Props) => {
           ref={component => {
             playbackInstance = component
             ref && ref(component)
+            props.videoRef && props.videoRef(component);
           }}
           onPlaybackStatusUpdate={updatePlaybackCallback}
           style={{
