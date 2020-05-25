@@ -45,6 +45,7 @@ declare type Props = {
     errorCallback: (error: Error) => void;
     switchToLandscape: () => void;
     switchToPortrait: () => void;
+    onControlPress: () => void;
     onBackgroundPress: (controlState: ControlStates) => void;
     showControlsOnLoad: boolean;
     sliderColor: Color;
@@ -79,6 +80,7 @@ declare const _default: (props: Pick<Props, "videoProps"> & {
     fadeOutDuration?: number | undefined;
     hideControlsTimerDuration?: number | undefined;
     videoRef?: ((vid: Video | null) => void) | undefined;
+    onControlPress?: (() => void) | undefined;
     onBackgroundPress?: ((controlState: ControlStates) => void) | undefined;
     showControlsOnLoad?: boolean | undefined;
 }, ref?: unknown) => JSX.Element;

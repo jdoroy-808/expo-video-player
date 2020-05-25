@@ -111,6 +111,7 @@ const defaultProps = {
   playbackCallback: (callback: AVPlaybackStatus) => {},
   switchToLandscape: () => console.warn(`Pass your logic to 'switchToLandscape' prop`),
   switchToPortrait: () => console.warn(`Pass your logic to 'switchToPortrait' prop`),
+  onControlPress: () => {},
   onBackgroundPress: (controlState: ControlStates) => {},
   showControlsOnLoad: false,
   sliderColor: SLIDER_COLOR,
@@ -155,6 +156,7 @@ type Props = {
   errorCallback: (error: Error) => void
   switchToLandscape: () => void
   switchToPortrait: () => void
+  onControlPress: () => void
   onBackgroundPress: (controlState: ControlStates) => void
   showControlsOnLoad: boolean
   sliderColor: Color
@@ -544,6 +546,7 @@ const VideoPlayer = (props: Props) => {
       onPress={() => {
         resetControlsTimer()
         callback()
+        props.onControlPress()
       }}
     >
       <View

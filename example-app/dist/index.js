@@ -74,6 +74,7 @@ const defaultProps = {
     playbackCallback: (callback) => { },
     switchToLandscape: () => console.warn(`Pass your logic to 'switchToLandscape' prop`),
     switchToPortrait: () => console.warn(`Pass your logic to 'switchToPortrait' prop`),
+    onControlPress: () => { },
     onBackgroundPress: (controlState) => { },
     showControlsOnLoad: false,
     sliderColor: SLIDER_COLOR,
@@ -366,6 +367,7 @@ const VideoPlayer = (props) => {
         return (<TouchableOpacity {...otherProps} hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }} onPress={() => {
             resetControlsTimer();
             callback();
+            props.onControlPress();
         }}>
       <View style={center && {
             backgroundColor: transparent ? 'transparent' : 'rgba(0, 0, 0, 0.4)',

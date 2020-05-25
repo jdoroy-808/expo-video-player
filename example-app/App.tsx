@@ -20,10 +20,12 @@ const App = () => (
       height={220}
       onBackgroundPress={(controlState: any) => {
         console.log('controlState', controlState);
-        video.playAsync();
       }}
       videoRef={vid => {
         video = vid;
+      }}
+      onControlPress={() => {
+        console.log('onControlPress');
       }}
     />
 
