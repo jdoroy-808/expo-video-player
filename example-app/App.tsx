@@ -9,7 +9,7 @@ const App = () => (
   <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
     <VideoPlayer
       videoProps={{
-        shouldPlay: true,
+        shouldPlay: false,
         resizeMode: Video.RESIZE_MODE_CONTAIN,
         source: {
           uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
@@ -19,16 +19,15 @@ const App = () => (
       videoBackground='transparent'
       height={220}
       onBackgroundPress={(controlState: any) => {
-        console.log('controlState', controlState);
+        // console.log('controlState', controlState);
       }}
       videoRef={vid => {
         video = vid;
       }}
       onControlPress={() => {
-        console.log('onControlPress');
       }}
     />
-
+{/* 
     <VideoPlayer
       videoProps={{
         shouldPlay: false,
@@ -66,7 +65,7 @@ const App = () => (
         },
       }}
       inFullscreen={true}
-    />
+    /> */}
   </ScrollView>
 )
 

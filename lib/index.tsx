@@ -35,7 +35,7 @@ const IOS_THUMB_IMAGE = require('./assets/thumb.png')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const IOS_TRACK_IMAGE = require('./assets/track.png')
 const SLIDER_COLOR: Color = '#0088FF'
-let isPlaying: boolean = false
+
 
 // UI states
 enum ControlStates {
@@ -174,6 +174,8 @@ const VideoPlayer = (props: Props) => {
   const [seekState, setSeekState] = useState<SeekStates>(SeekStates.NotSeeking)
   const [playbackInstancePosition, setPlaybackInstancePosition] = useState(0)
   const [playbackInstanceDuration, setPlaybackInstanceDuration] = useState(0)
+  const [isOn, setIsOn] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
   const [shouldPlay, setShouldPlay] = useState(false)
   const [error, setError] = useState('')
   const [sliderWidth, setSliderWidth] = useState(0)
@@ -278,7 +280,7 @@ const VideoPlayer = (props: Props) => {
         errorCallback({ type: ErrorSeverity.Fatal, message: errorMsg, obj: {} })
       }
     } else {
-      isPlaying = status.isPlaying;
+      setIsPlaying(status.isPlaying);
       // Update current position, duration, and `shouldPlay`
       setPlaybackInstancePosition(status.positionMillis || 0)
       setPlaybackInstanceDuration(status.durationMillis || 0)
@@ -401,6 +403,7 @@ const VideoPlayer = (props: Props) => {
   }
 
   const togglePlay = async () => {
+    setIsOn(!isOn);
     if (controlsState === ControlStates.Hidden) {
       return
     }
@@ -415,6 +418,7 @@ const VideoPlayer = (props: Props) => {
     switch (controlsState) {
       case ControlStates.Shown:
         // If the controls are currently Shown, a tap should hide controls quickly
+        
         if (isPlaying) {
           setControlsState(ControlStates.Hiding)
           hideControls(true)
@@ -448,7 +452,9 @@ const VideoPlayer = (props: Props) => {
     showingAnimation.start(({ finished }) => {
       if (finished) {
         setControlsState(ControlStates.Shown)
-        resetControlsTimer()
+        if (isPlaying && isOn) {
+          resetControlsTimer()
+        }
       }
     })
   }
@@ -473,10 +479,8 @@ const VideoPlayer = (props: Props) => {
 
   const onTimerDone = () => {
     // After the controls timer runs out, fade away the controls slowly
-    if (isPlaying) {
-      setControlsState(ControlStates.Hiding)
-      hideControls()
-    }
+    setControlsState(ControlStates.Hiding)
+    hideControls()
   }
 
   const resetControlsTimer = () => {
@@ -544,7 +548,11 @@ const VideoPlayer = (props: Props) => {
       {...otherProps}
       hitSlop={{ top: 20, left: 20, bottom: 20, right: 20 }}
       onPress={() => {
-        resetControlsTimer()
+        // resetControlsTimer()
+        if (playbackState === PlaybackStates.Paused) {
+          hideControls();
+        }
+
         callback()
         props.onControlPress()
       }}
@@ -619,6 +627,7 @@ const VideoPlayer = (props: Props) => {
             playbackInstance = component
             ref && ref(component)
             props.videoRef && props.videoRef(component);
+            setIsOn(otherVideoProps.shouldPlay || false);
           }}
           onPlaybackStatusUpdate={updatePlaybackCallback}
           style={{
