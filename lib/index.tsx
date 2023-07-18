@@ -451,7 +451,7 @@ const VideoPlayer = (props: Props) => {
   const toggleMute = () => {
     const nextIsMuted = !isMuted
 
-    Audio.setIsEnabledAsync(nextIsMuted)
+    playbackInstance?.setIsMutedAsync(nextIsMuted)
 
     setIsMuted(nextIsMuted)
   }
