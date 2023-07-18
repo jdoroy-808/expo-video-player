@@ -311,7 +311,7 @@ const VideoPlayer = (props) => {
     };
     const toggleMute = () => {
         const nextIsMuted = !isMuted;
-        Audio.setIsEnabledAsync(nextIsMuted);
+        playbackInstance === null || playbackInstance === void 0 ? void 0 : playbackInstance.setIsMutedAsync(nextIsMuted);
         setIsMuted(nextIsMuted);
     };
     const showControls = () => {
