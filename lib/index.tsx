@@ -448,10 +448,10 @@ const VideoPlayer = (props: Props) => {
     }
   }
 
-  const toggleMute = () => {
+  const toggleMute = async () => {
     const nextIsMuted = !isMuted
 
-    playbackInstance?.setIsMutedAsync(nextIsMuted)
+    await playbackInstance?.setIsMutedAsync(nextIsMuted)
 
     setIsMuted(nextIsMuted)
   }

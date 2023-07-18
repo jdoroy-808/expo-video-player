@@ -309,9 +309,9 @@ const VideoPlayer = (props) => {
                 break;
         }
     };
-    const toggleMute = () => {
+    const toggleMute = async () => {
         const nextIsMuted = !isMuted;
-        playbackInstance === null || playbackInstance === void 0 ? void 0 : playbackInstance.setIsMutedAsync(nextIsMuted);
+        await (playbackInstance === null || playbackInstance === void 0 ? void 0 : playbackInstance.setIsMutedAsync(nextIsMuted));
         setIsMuted(nextIsMuted);
     };
     const showControls = () => {
