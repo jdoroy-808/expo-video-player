@@ -49,9 +49,12 @@ declare type Props = {
     onBackgroundPress: (controlState: ControlStates) => void;
     showControlsOnLoad: boolean;
     sliderColor: Color;
+    showMuteButton: boolean;
 };
 declare const _default: (props: Pick<Props, "videoProps"> & {
     children?: null | undefined;
+    width?: number | undefined;
+    height?: number | undefined;
     playIcon?: (() => JSX.Element) | undefined;
     pauseIcon?: (() => JSX.Element) | undefined;
     spinner?: (() => JSX.Element) | undefined;
@@ -70,8 +73,7 @@ declare const _default: (props: Pick<Props, "videoProps"> & {
         fontSize: number;
     } | undefined;
     videoBackground?: string | undefined;
-    width?: number | undefined;
-    height?: number | undefined;
+    showMuteButton?: boolean | undefined;
     errorCallback?: ((error: Error) => void) | undefined;
     debug?: boolean | undefined;
     playbackCallback?: ((callback: AVPlaybackStatus) => void) | undefined;

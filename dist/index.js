@@ -1,7 +1,7 @@
 import { __rest } from "tslib";
 import { Animated, Dimensions, Slider, Text, TouchableOpacity, TouchableWithoutFeedback, View, } from 'react-native';
 import { Audio, Video } from 'expo-av';
-import { FullscreenEnterIcon, FullscreenExitIcon, PauseIcon, PlayIcon, ReplayIcon, Spinner, } from './assets/icons';
+import { FullscreenEnterIcon, FullscreenExitIcon, PauseIcon, PlayIcon, ReplayIcon, Spinner, VolumeOffIcon, VolumeUpIcon, } from './assets/icons';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { withDefaultProps } from 'with-default-props';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -77,6 +77,8 @@ const defaultProps = {
     onBackgroundPress: (controlState) => { },
     showControlsOnLoad: false,
     sliderColor: SLIDER_COLOR,
+    // Custom
+    showMuteButton: false,
 };
 const VideoPlayer = (props) => {
     let playbackInstance = null;
@@ -96,6 +98,7 @@ const VideoPlayer = (props) => {
     const [sliderWidth, setSliderWidth] = useState(0);
     const [controlsState, setControlsState] = useState(props.showControlsOnLoad ? ControlStates.Shown : ControlStates.Hidden);
     const [controlsOpacity] = useState(new Animated.Value(props.showControlsOnLoad ? 1 : 0));
+    const [isMuted, setIsMuted] = useState(false);
     // Set audio mode to play even in silent mode (like the YouTube app)
     const setAudio = async () => {
         const { errorCallback } = props;
@@ -306,6 +309,11 @@ const VideoPlayer = (props) => {
                 break;
         }
     };
+    const toggleMute = () => {
+        const nextIsMuted = !isMuted;
+        Audio.setIsEnabledAsync(nextIsMuted);
+        setIsMuted(nextIsMuted);
+    };
     const showControls = () => {
         const { fadeInDuration } = props;
         showingAnimation = Animated.timing(controlsOpacity, {
@@ -350,7 +358,7 @@ const VideoPlayer = (props) => {
         }
         controlsTimer = setTimeout(() => onTimerDone(), hideControlsTimerDuration);
     };
-    const { playIcon: VideoPlayIcon, pauseIcon: VideoPauseIcon, spinner: VideoSpinner, fullscreenEnterIcon: VideoFullscreenEnterIcon, fullscreenExitIcon: VideoFullscreenExitIcon, replayIcon: VideoReplayIcon, switchToLandscape, switchToPortrait, inFullscreen, sliderColor, iosThumbImage, iosTrackImage, showFullscreenButton, textStyle, videoProps, videoBackground, width, height, } = props;
+    const { playIcon: VideoPlayIcon, pauseIcon: VideoPauseIcon, spinner: VideoSpinner, fullscreenEnterIcon: VideoFullscreenEnterIcon, fullscreenExitIcon: VideoFullscreenExitIcon, replayIcon: VideoReplayIcon, switchToLandscape, switchToPortrait, inFullscreen, sliderColor, iosThumbImage, iosTrackImage, showFullscreenButton, textStyle, videoProps, videoBackground, width, height, showMuteButton, } = props;
     const centeredContentWidth = 60;
     const screenRatio = width / height;
     let videoHeight = height;
@@ -499,6 +507,10 @@ const VideoPlayer = (props) => {
         inFullscreen ? switchToPortrait() : switchToLandscape();
     }}>
               {inFullscreen ? <VideoFullscreenExitIcon /> : <VideoFullscreenEnterIcon />}
+            </Control>)}
+
+          {showMuteButton && (<Control transparent center={false} callback={toggleMute}>
+              {isMuted ? <VolumeUpIcon /> : <VolumeOffIcon />}
             </Control>)}
         </Animated.View>
       </View>

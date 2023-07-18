@@ -69,7 +69,8 @@
   "peerDependencies": {
     "@react-native-community/netinfo": ">=3.2.1",
     "expo": ">=34.0.0",
-    "expo-av": ">=5.0.2"
+    "expo-av": ">=5.0.2",
+    "expo-asset": "~8.0.0"
   },
   "dependencies": {
     "tslib": "^1.11.1",

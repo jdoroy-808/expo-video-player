@@ -24,6 +24,8 @@ import {
   PlayIcon,
   ReplayIcon,
   Spinner,
+  VolumeOffIcon,
+  VolumeUpIcon,
 } from './assets/icons'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { withDefaultProps } from 'with-default-props'
@@ -35,7 +37,6 @@ const IOS_THUMB_IMAGE = require('./assets/thumb.png')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const IOS_TRACK_IMAGE = require('./assets/track.png')
 const SLIDER_COLOR: Color = '#0088FF'
-
 
 // UI states
 enum ControlStates {
@@ -115,6 +116,9 @@ const defaultProps = {
   onBackgroundPress: (controlState: ControlStates) => {},
   showControlsOnLoad: false,
   sliderColor: SLIDER_COLOR,
+
+  // Custom
+  showMuteButton: false,
 }
 
 type Props = {
@@ -160,6 +164,9 @@ type Props = {
   onBackgroundPress: (controlState: ControlStates) => void
   showControlsOnLoad: boolean
   sliderColor: Color
+
+  // Custom
+  showMuteButton: boolean
 }
 
 const VideoPlayer = (props: Props) => {
@@ -183,6 +190,7 @@ const VideoPlayer = (props: Props) => {
     props.showControlsOnLoad ? ControlStates.Shown : ControlStates.Hidden
   )
   const [controlsOpacity] = useState(new Animated.Value(props.showControlsOnLoad ? 1 : 0))
+  const [isMuted, setIsMuted] = useState(false)
 
   // Set audio mode to play even in silent mode (like the YouTube app)
   const setAudio = async () => {
@@ -280,7 +288,7 @@ const VideoPlayer = (props: Props) => {
         errorCallback({ type: ErrorSeverity.Fatal, message: errorMsg, obj: {} })
       }
     } else {
-      setIsPlaying(status.isPlaying);
+      setIsPlaying(status.isPlaying)
       // Update current position, duration, and `shouldPlay`
       setPlaybackInstancePosition(status.positionMillis || 0)
       setPlaybackInstanceDuration(status.durationMillis || 0)
@@ -403,7 +411,7 @@ const VideoPlayer = (props: Props) => {
   }
 
   const togglePlay = async () => {
-    setIsOn(!isOn);
+    setIsOn(!isOn)
     if (controlsState === ControlStates.Hidden) {
       return
     }
@@ -414,11 +422,11 @@ const VideoPlayer = (props: Props) => {
   }
 
   const toggleControls = () => {
-    props.onBackgroundPress(controlsState);
+    props.onBackgroundPress(controlsState)
     switch (controlsState) {
       case ControlStates.Shown:
         // If the controls are currently Shown, a tap should hide controls quickly
-        
+
         if (isPlaying) {
           setControlsState(ControlStates.Hiding)
           hideControls(true)
@@ -438,6 +446,14 @@ const VideoPlayer = (props: Props) => {
         // A tap when the controls are fading in should do nothing
         break
     }
+  }
+
+  const toggleMute = () => {
+    const nextIsMuted = !isMuted
+
+    Audio.setIsEnabledAsync(nextIsMuted)
+
+    setIsMuted(nextIsMuted)
   }
 
   const showControls = () => {
@@ -512,6 +528,7 @@ const VideoPlayer = (props: Props) => {
     videoBackground,
     width,
     height,
+    showMuteButton,
   } = props
 
   const centeredContentWidth = 60
@@ -550,7 +567,7 @@ const VideoPlayer = (props: Props) => {
       onPress={() => {
         // resetControlsTimer()
         if (playbackState === PlaybackStates.Paused) {
-          hideControls();
+          hideControls()
         }
 
         callback()
@@ -626,8 +643,8 @@ const VideoPlayer = (props: Props) => {
           ref={component => {
             playbackInstance = component
             ref && ref(component)
-            props.videoRef && props.videoRef(component);
-            setIsOn(otherVideoProps.shouldPlay || false);
+            props.videoRef && props.videoRef(component)
+            setIsOn(otherVideoProps.shouldPlay || false)
           }}
           onPlaybackStatusUpdate={updatePlaybackCallback}
           style={{
@@ -740,6 +757,12 @@ const VideoPlayer = (props: Props) => {
               }}
             >
               {inFullscreen ? <VideoFullscreenExitIcon /> : <VideoFullscreenEnterIcon />}
+            </Control>
+          )}
+
+          {showMuteButton && (
+            <Control transparent center={false} callback={toggleMute}>
+              {isMuted ? <VolumeUpIcon /> : <VolumeOffIcon />}
             </Control>
           )}
         </Animated.View>
