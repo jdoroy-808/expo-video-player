@@ -510,7 +510,7 @@ const VideoPlayer = (props) => {
             </Control>)}
 
           {showMuteButton && (<Control transparent center={false} callback={toggleMute}>
-              {isMuted ? <VolumeUpIcon /> : <VolumeOffIcon />}
+              {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
             </Control>)}
         </Animated.View>
       </View>
